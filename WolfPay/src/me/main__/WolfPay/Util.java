@@ -30,9 +30,9 @@ public class Util {
 		for (LivingEntity entity : player.getWorld().getLivingEntities()) {
 			if ((entity instanceof Wolf) && (((Wolf) entity).getOwner() instanceof Player)) {
 				Wolf wolf = (Wolf) entity;
-				
-				if (wolf.isTamed() && player.getName().equals(((Player) wolf.getOwner()).getName())) {
-					wolves.add(wolf);
+				if (wolf.isTamed()) {
+					if (((Player) wolf.getOwner()).getName() == player.getName())
+						wolves.add(wolf);
 				}
 			}
 		}

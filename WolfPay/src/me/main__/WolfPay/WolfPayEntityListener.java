@@ -30,11 +30,13 @@ public class WolfPayEntityListener extends EntityListener {
 				if (wolves.size() <= WolfPay.freewolves)
 				{
 					//works. Now just display a message to him
-					tamer.sendMessage("&aYou have now x of y free wolves."
+					tamer.sendMessage("§aYou have now x of y free wolves."
 							.replaceAll("x", String.valueOf(wolves.size()))
 							.replaceAll("y", String.valueOf(WolfPay.freewolves)));
 					if (wolves.size() == WolfPay.freewolves) //if he has reached the limit
-						tamer.sendMessage("&eFor the next wolf you have to pay.");
+						tamer.sendMessage("§eFor the next wolf you have to pay.");
+					
+					wolf.setOwner(tamer);
 				}
 				else
 				{
@@ -43,22 +45,26 @@ public class WolfPayEntityListener extends EntityListener {
 					if (balance.hasEnough(WolfPay.price))
 					{
 						//yay, let's go on!
-						tamer.sendMessage("&aYou have successfully paid money and tamed a wolf!"
+						balance.subtract(WolfPay.price);
+						tamer.sendMessage("§aYou have successfully paid money and tamed a wolf!"
 								.replaceAll("money", iConomy.format(WolfPay.price)));
+						
+						wolf.setOwner(tamer);
 					}
 					else
 					{
-						tamer.sendMessage("&cSorry, but you don't have enough money to do this.");
+						tamer.sendMessage("§cSorry, but you don't have enough money to do this.");
 						event.setCancelled(true);
 					}					
 				}
 			}
 			else
 			{
-				tamer.sendMessage("&cSorry, but you don't have the permission to do this.");
+				tamer.sendMessage("§cSorry, but you don't have the permission to do this.");
 				event.setCancelled(true);
 			}
 		}
 		//else: Either not a wolf tamed or not tamed by a player. ATM not possible but maybe in future updates.
+		
 	}
 }
