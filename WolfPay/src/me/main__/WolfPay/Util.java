@@ -46,6 +46,6 @@ public class Util {
 	}
 	public static void log(String message, Level loglevel)
 	{
-		logger.log(loglevel, "[MakeUse] message".replaceAll("message", message));
+		logger.log(loglevel, "[WolfPay] message".replaceAll("message", message));
 	}
 }

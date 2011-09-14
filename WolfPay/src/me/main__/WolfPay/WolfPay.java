@@ -56,7 +56,7 @@ public class WolfPay extends JavaPlugin {
 		pm.registerEvent(Type.ENTITY_TAME, new WolfPayEntityListener(), Priority.High, this);
 		
 		//config
-		File dataDirectory = new File("plugins" + File.separator + "MakeUse");
+		File dataDirectory = new File("plugins" + File.separator + "WolfPay");
 		dataDirectory.mkdirs();
 		File configFile = new File(dataDirectory, "config.yml");
 		if (!configFile.exists())
