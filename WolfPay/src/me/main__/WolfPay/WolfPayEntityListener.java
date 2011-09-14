@@ -2,6 +2,7 @@ package me.main__.WolfPay;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityListener;
@@ -30,11 +31,11 @@ public class WolfPayEntityListener extends EntityListener {
 				if (wolves.size() <= WolfPay.freewolves)
 				{
 					//works. Now just display a message to him
-					tamer.sendMessage("§aYou have now x of y free wolves."
+					tamer.sendMessage(ChatColor.RED.toString() + "You have now x of y free wolves."
 							.replaceAll("x", String.valueOf(wolves.size()))
 							.replaceAll("y", String.valueOf(WolfPay.freewolves)));
 					if (wolves.size() == WolfPay.freewolves) //if he has reached the limit
-						tamer.sendMessage("§eFor the next wolf you have to pay.");
+						tamer.sendMessage(ChatColor.YELLOW.toString() + "For the next wolf you have to pay.");
 					
 					wolf.setOwner(tamer);
 				}
@@ -46,21 +47,21 @@ public class WolfPayEntityListener extends EntityListener {
 					{
 						//yay, let's go on!
 						balance.subtract(WolfPay.price);
-						tamer.sendMessage("§aYou have successfully paid money and tamed a wolf!"
+						tamer.sendMessage(ChatColor.GREEN + "You have successfully paid money and tamed a wolf!"
 								.replaceAll("money", iConomy.format(WolfPay.price)));
 						
 						wolf.setOwner(tamer);
 					}
 					else
 					{
-						tamer.sendMessage("§cSorry, but you don't have enough money to do this.");
+						tamer.sendMessage(ChatColor.RED.toString() + "Sorry, but you don't have enough money to do this.");
 						event.setCancelled(true);
 					}					
 				}
 			}
 			else
 			{
-				tamer.sendMessage("§cSorry, but you don't have the permission to do this.");
+				tamer.sendMessage(ChatColor.RED.toString() + "Sorry, but you don't have the permission to do this.");
 				event.setCancelled(true);
 			}
 		}
