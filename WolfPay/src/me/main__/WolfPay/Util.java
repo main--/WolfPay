@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Wolf;
 
 public class Util {
