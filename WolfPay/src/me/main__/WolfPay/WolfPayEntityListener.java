@@ -31,7 +31,7 @@ public class WolfPayEntityListener extends EntityListener {
 				if (wolves.size() <= WolfPay.freewolves)
 				{
 					//works. Now just display a message to him
-					tamer.sendMessage(ChatColor.RED.toString() + "You have now x of y free wolves."
+					tamer.sendMessage(ChatColor.GREEN.toString() + "You have now x of y free wolves."
 							.replaceAll("x", String.valueOf(wolves.size()))
 							.replaceAll("y", String.valueOf(WolfPay.freewolves)));
 					if (wolves.size() == WolfPay.freewolves) //if he has reached the limit
