@@ -1,7 +1,6 @@
 package me.main__.WolfPay;
 
 import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
@@ -12,6 +11,8 @@ import com.iConomy.iConomy;
 import com.iConomy.system.Holdings;
 
 public class WolfPayEntityListener extends EntityListener {
+	
+	public static WolfPay plugin;
 	
 	@Override
 	public void onEntityTame(EntityTameEvent event)
@@ -28,14 +29,24 @@ public class WolfPayEntityListener extends EntityListener {
 				//next: is he inside the free-limit?
 				List<Wolf> wolves = Util.getWolves(tamer);
 				wolves.add(wolf); //since this event isn't fully processed, we need to add the wolf manually.
-				if (wolves.size() <= WolfPay.freewolves)
+				int allowedwolves = WolfPay.freewolves;
+				if (WolfPay.savebought)
+				{
+					Account account = 
+							plugin.getDatabase().find(Account.class).where().ieq("playerName", tamer.getName()).findUnique();
+					if (account != null)
+					{
+						allowedwolves += account.getBoughtwolves();
+					}
+				}
+				if (wolves.size() <= (WolfPay.freewolves + allowedwolves))
 				{
 					//works. Now just display a message to him
-					tamer.sendMessage(ChatColor.GREEN.toString() + "You have now x of y free wolves."
+					tamer.sendMessage(ChatColor.GREEN.toString() + "You have now x of y wolves."
 							.replaceAll("x", String.valueOf(wolves.size()))
-							.replaceAll("y", String.valueOf(WolfPay.freewolves)));
+							.replaceAll("y", String.valueOf(allowedwolves)));
 					if (wolves.size() == WolfPay.freewolves) //if he has reached the limit
-						tamer.sendMessage(ChatColor.YELLOW.toString() + "For the next wolf you have to pay.");
+						tamer.sendMessage(ChatColor.YELLOW.toString() + "For the next wolf you'll have to pay.");
 					
 					wolf.setOwner(tamer);
 				}
@@ -51,6 +62,27 @@ public class WolfPayEntityListener extends EntityListener {
 								.replaceAll("money", iConomy.format(WolfPay.price)));
 						
 						wolf.setOwner(tamer);
+						
+						if (WolfPay.savebought)
+						{
+							//we want to save this in the database
+							Account account = 
+									plugin.getDatabase().find(Account.class).where().ieq("playerName", tamer.getName()).findUnique();
+							
+							if (account == null)
+							{
+								account = new Account();
+								account.setBoughtwolves(1);
+								account.setPlayerName(tamer.getName());
+							}
+							else
+							{
+								//upgrade the account
+								account.setBoughtwolves(account.getBoughtwolves() + 1);
+							}
+							
+							plugin.getDatabase().save(account);
+						}
 					}
 					else
 					{

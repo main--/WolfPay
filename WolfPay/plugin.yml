@@ -3,4 +3,5 @@ main: me.main__.WolfPay.WolfPay
 version: 1.0
 author: main()
 description: Let players pay for wolves!
+database: true
 depends: [Permissions, iConomy]

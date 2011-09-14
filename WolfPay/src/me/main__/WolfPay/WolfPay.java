@@ -5,7 +5,11 @@ package me.main__.WolfPay;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
+
+import javax.persistence.PersistenceException;
 
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
@@ -28,6 +32,7 @@ public class WolfPay extends JavaPlugin {
 	
 	public static int price = 25;
 	public static int freewolves = 2;
+	public static boolean savebought = true;
 	
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.Plugin#onDisable()
@@ -41,6 +46,8 @@ public class WolfPay extends JavaPlugin {
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
 	public void onEnable() {
+		WolfPayEntityListener.plugin = this;
+		
 		PluginManager pm = this.getServer().getPluginManager();
 		
 		try {
@@ -70,10 +77,33 @@ public class WolfPay extends JavaPlugin {
 		Configuration config = new Configuration(configFile);
 		price = config.getInt("price", price);
 		freewolves = config.getInt("freewolves", freewolves);
+		savebought = config.getBoolean("freewolves", savebought);
 		config.save();
+		
+		if (savebought)
+			setupDatabase();
+		//if not, we don't even need the database.
 		
 		PluginDescriptionFile pdfFile = this.getDescription();
         Util.log(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 	}
 
+	private void setupDatabase() {
+		try
+		{
+			getDatabase().find(Account.class).findRowCount();
+		}
+		catch (PersistenceException e)
+		{
+			Util.log("Installing database!");
+            installDDL();
+		}
+	}
+	
+    @Override
+    public List<Class<?>> getDatabaseClasses() {
+        List<Class<?>> list = new ArrayList<Class<?>>();
+        list.add(Account.class);
+        return list;
+    }
 }
