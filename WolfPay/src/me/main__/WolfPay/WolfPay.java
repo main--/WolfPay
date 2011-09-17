@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 import javax.persistence.PersistenceException;
@@ -19,8 +18,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
-
 import com.iConomy.iConomy;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
@@ -89,7 +86,13 @@ public class WolfPay extends JavaPlugin {
 			setupDatabase();
 		//if not, we don't even need the database.
 		
-		File messagesFile = new File(dataDirectory, "messages.yml");
+		//ConfigurationNode cmessages = config.getNode("messages");
+		//if (cmessages == null)
+		//{
+		//	cmessages = Configuration.getEmptyNode();
+		//}
+		
+/*		File messagesFile = new File(dataDirectory, "messages.yml");
 		if (!messagesFile.exists())
 			try {
 				messagesFile.createNewFile();
@@ -98,25 +101,45 @@ public class WolfPay extends JavaPlugin {
 				Util.log("Couldn't create messages.yml. Disabling...", Level.SEVERE);
 				pm.disablePlugin(this);
 			}
-		Configuration messages = new Configuration(messagesFile);
+		Configuration cmessages = new Configuration(messagesFile);*/
 		//first put the default values into the HashMap, then read
 		WolfPay.messages.put("havenow", "You have now x of y wolves.");
 		WolfPay.messages.put("nextpay", "For the next wolf you'll have to pay.");
 		WolfPay.messages.put("successpay", "You have successfully paid money and tamed a wolf!");
 		WolfPay.messages.put("notenoughmoney", "Sorry, but you don't have enough money to do this.");
 		WolfPay.messages.put("nopermission", "Sorry, but you don't have the permission to do this.");
-		Map<String, ConfigurationNode> mmap = messages.getNodes("messages");
-		if (mmap != null)
-			for (String s : mmap.keySet())
-			{
-				WolfPay.messages.put(s, messages.getString("messages." + s));
-			}
+		
+		Util.log("DEBUG: messages.size() = x".replaceAll("x", String.valueOf(WolfPay.messages.size())));
+		Util.log("DEBUG: keySet().size() = x".replaceAll("x", String.valueOf(WolfPay.messages.keySet().size())));
+		Util.log("DEBUG: havenow = lol".replaceAll("lol", config.getString("messages.havenow", "fail")));
 		
 		for (String s : WolfPay.messages.keySet())
 		{
-			messages.setProperty("messages." + s, WolfPay.messages.get(s));
+			try
+			{
+				Util.log("DEBUG: Getting message msg (2)".replaceAll("msg", s).replaceAll("2", config.getString("messages." + s)));
+			}
+			catch (Throwable t)
+			{
+				Util.log("DEBUG: Getting message msg (null)".replaceAll("msg", s));
+			}
+			WolfPay.messages.put(s, config.getString("messages." + s, WolfPay.messages.get(s)));
 		}
-		messages.save();
+
+//		//if (keys != null)
+//		Util.log("DEBUG: keys.size() = x".replaceAll("x", String.valueOf(all.size())));
+//			for (String s : keys)
+//			{
+//				Util.log("DEBUG: Getting message msg".replaceAll("msg", s));
+//				WolfPay.messages.put(s, cmessages.getString(s));
+//			}
+//		
+//		for (String s : WolfPay.messages.keySet())
+//		{
+//			cmessages.setProperty(s, getMessage(s));
+//		}
+		//config.setProperty("messages", cmessages);
+		config.save();
 		
 		PluginDescriptionFile pdfFile = this.getDescription();
 		Util.log(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
