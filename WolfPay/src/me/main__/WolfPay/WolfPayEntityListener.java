@@ -42,11 +42,11 @@ public class WolfPayEntityListener extends EntityListener {
 				if (wolves.size() <= (WolfPay.freewolves + allowedwolves))
 				{
 					//works. Now just display a message to him
-					tamer.sendMessage(ChatColor.GREEN.toString() + "You have now x of y wolves."
+					tamer.sendMessage(ChatColor.GREEN.toString() + WolfPay.getMessage("havenow")
 							.replaceAll("x", String.valueOf(wolves.size()))
 							.replaceAll("y", String.valueOf(allowedwolves)));
-					if (wolves.size() == WolfPay.freewolves) //if he has reached the limit
-						tamer.sendMessage(ChatColor.YELLOW.toString() + "For the next wolf you'll have to pay.");
+					if (wolves.size() == allowedwolves) //if he has reached the limit
+						tamer.sendMessage(ChatColor.YELLOW.toString() + WolfPay.getMessage("nextpay"));
 					
 					wolf.setOwner(tamer);
 				}
@@ -58,7 +58,7 @@ public class WolfPayEntityListener extends EntityListener {
 					{
 						//yay, let's go on!
 						balance.subtract(WolfPay.price);
-						tamer.sendMessage(ChatColor.GREEN + "You have successfully paid money and tamed a wolf!"
+						tamer.sendMessage(ChatColor.GREEN + WolfPay.getMessage("successpay")
 								.replaceAll("money", iConomy.format(WolfPay.price)));
 						
 						wolf.setOwner(tamer);
@@ -86,14 +86,14 @@ public class WolfPayEntityListener extends EntityListener {
 					}
 					else
 					{
-						tamer.sendMessage(ChatColor.RED.toString() + "Sorry, but you don't have enough money to do this.");
+						tamer.sendMessage(ChatColor.RED.toString() + WolfPay.getMessage("notenoughmoney"));
 						event.setCancelled(true);
 					}					
 				}
 			}
 			else
 			{
-				tamer.sendMessage(ChatColor.RED.toString() + "Sorry, but you don't have the permission to do this.");
+				tamer.sendMessage(ChatColor.RED.toString() + WolfPay.getMessage("nopermission"));
 				event.setCancelled(true);
 			}
 		}

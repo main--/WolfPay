@@ -6,7 +6,9 @@ package me.main__.WolfPay;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import javax.persistence.PersistenceException;
@@ -17,6 +19,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
+import org.bukkit.util.config.ConfigurationNode;
 
 import com.iConomy.iConomy;
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -34,12 +37,14 @@ public class WolfPay extends JavaPlugin {
 	public static int freewolves = 2;
 	public static boolean savebought = true;
 	
+	public static HashMap<String, String> messages = new HashMap<String, String>();
+	
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.Plugin#onDisable()
 	 */
 	public void onDisable() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	/* (non-Javadoc)
@@ -84,10 +89,44 @@ public class WolfPay extends JavaPlugin {
 			setupDatabase();
 		//if not, we don't even need the database.
 		
+		File messagesFile = new File(dataDirectory, "messages.yml");
+		if (!messagesFile.exists())
+			try {
+				messagesFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				Util.log("Couldn't create messages.yml. Disabling...", Level.SEVERE);
+				pm.disablePlugin(this);
+			}
+		Configuration messages = new Configuration(messagesFile);
+		//first put the default values into the HashMap, then read
+		WolfPay.messages.put("havenow", "You have now x of y wolves.");
+		WolfPay.messages.put("nextpay", "For the next wolf you'll have to pay.");
+		WolfPay.messages.put("successpay", "You have successfully paid money and tamed a wolf!");
+		WolfPay.messages.put("notenoughmoney", "Sorry, but you don't have enough money to do this.");
+		WolfPay.messages.put("nopermission", "Sorry, but you don't have the permission to do this.");
+		Map<String, ConfigurationNode> mmap = messages.getNodes("messages");
+		if (mmap != null)
+			for (String s : mmap.keySet())
+			{
+				WolfPay.messages.put(s, messages.getString("messages." + s));
+			}
+		
+		for (String s : WolfPay.messages.keySet())
+		{
+			messages.setProperty("messages." + s, WolfPay.messages.get(s));
+		}
+		messages.save();
+		
 		PluginDescriptionFile pdfFile = this.getDescription();
-        Util.log(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+		Util.log(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 	}
-
+	
+	public static String getMessage(String key)
+	{
+		return messages.get(key);
+	}
+	
 	private void setupDatabase() {
 		try
 		{
@@ -96,7 +135,7 @@ public class WolfPay extends JavaPlugin {
 		catch (PersistenceException e)
 		{
 			Util.log("Installing database!");
-            installDDL();
+			installDDL();
 		}
 	}
 	
