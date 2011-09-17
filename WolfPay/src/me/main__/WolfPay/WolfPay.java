@@ -43,8 +43,8 @@ public class WolfPay extends JavaPlugin {
 	 * @see org.bukkit.plugin.Plugin#onDisable()
 	 */
 	public void onDisable() {
-		// TODO Auto-generated method stub
-		
+		PluginDescriptionFile pdfFile = this.getDescription();
+		Util.log(pdfFile.getName() + " version " + pdfFile.getVersion() + " is disabled!");
 	}
 
 	/* (non-Javadoc)
