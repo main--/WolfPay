@@ -77,10 +77,11 @@ public class WolfPay extends JavaPlugin {
 				pm.disablePlugin(this);
 			}
 		Configuration config = new Configuration(configFile);
+		config.load();
 		price = config.getInt("price", price);
 		freewolves = config.getInt("freewolves", freewolves);
 		savebought = config.getBoolean("freewolves", savebought);
-		config.save();
+		//config.save();
 		
 		if (savebought)
 			setupDatabase();
