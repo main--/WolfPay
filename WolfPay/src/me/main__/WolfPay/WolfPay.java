@@ -81,19 +81,6 @@ public class WolfPay extends JavaPlugin {
 		for (String s : WolfPay.messages.keySet())
 			WolfPay.messages.put(s, config.getString("messages." + s, WolfPay.messages.get(s)));
 
-//		//if (keys != null)
-//		Util.log("DEBUG: keys.size() = x".replaceAll("x", String.valueOf(all.size())));
-//			for (String s : keys)
-//			{
-//				Util.log("DEBUG: Getting message msg".replaceAll("msg", s));
-//				WolfPay.messages.put(s, cmessages.getString(s));
-//			}
-//		
-//		for (String s : WolfPay.messages.keySet())
-//		{
-//			cmessages.setProperty(s, getMessage(s));
-//		}
-		//config.setProperty("messages", cmessages);
 		config.save();
 		
 		PluginDescriptionFile pdfFile = this.getDescription();
