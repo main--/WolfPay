@@ -1,6 +1,7 @@
 package me.main__.WolfPay;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.avaje.ebean.validation.NotNull;
@@ -11,6 +12,7 @@ public class Account {
 //	@Id
 //	private int id;
 	
+	@Id
 	@NotNull
 	private String playerName;
 	

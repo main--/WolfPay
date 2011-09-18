@@ -39,7 +39,7 @@ public class WolfPayEntityListener extends EntityListener {
 						allowedwolves += account.getBoughtwolves();
 					}
 				}
-				if (wolves.size() <= (WolfPay.freewolves + allowedwolves))
+				if (wolves.size() <= allowedwolves)
 				{
 					//works. Now just display a message to him
 					tamer.sendMessage(ChatColor.GREEN.toString() + WolfPay.getMessage("havenow")
