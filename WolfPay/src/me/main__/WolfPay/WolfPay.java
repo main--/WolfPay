@@ -65,7 +65,7 @@ public class WolfPay extends JavaPlugin {
 		Configuration config = this.getConfiguration();
 		price = config.getInt("price", price);
 		freewolves = config.getInt("freewolves", freewolves);
-		savebought = config.getBoolean("freewolves", savebought);
+		savebought = config.getBoolean("savebought", savebought);
 		
 		if (savebought)
 			setupDatabase();
