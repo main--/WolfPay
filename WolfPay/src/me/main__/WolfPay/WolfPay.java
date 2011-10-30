@@ -1,5 +1,7 @@
 package me.main__.WolfPay;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,12 +9,13 @@ import java.util.logging.Level;
 
 import javax.persistence.PersistenceException;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
+
 import com.iConomy.iConomy;
 
 /**
@@ -55,10 +58,14 @@ public class WolfPay extends JavaPlugin {
 		
 		pm.registerEvent(Type.ENTITY_TAME, new WolfPayEntityListener(), Priority.High, this);
 		
-		Configuration config = this.getConfiguration();
+		FileConfiguration config = this.getConfig();
 		price = config.getInt("price", price);
 		freewolves = config.getInt("freewolves", freewolves);
 		savebought = config.getBoolean("savebought", savebought);
+		
+		config.set("price", price);
+		config.set("freewolves", freewolves);
+		config.set("savebought", savebought);
 		
 		if (savebought)
 			setupDatabase();
@@ -74,7 +81,13 @@ public class WolfPay extends JavaPlugin {
 		for (String s : WolfPay.messages.keySet())
 			WolfPay.messages.put(s, config.getString("messages." + s, WolfPay.messages.get(s)));
 
-		config.save();
+		try {
+			config.save(new File(this.getDataFolder(), "config.yml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			Util.log("Couldn't save the config! Disabling...", Level.SEVERE);
+			this.getServer().getPluginManager().disablePlugin(this);
+		}
 		
 		PluginDescriptionFile pdfFile = this.getDescription();
 		Util.log(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
