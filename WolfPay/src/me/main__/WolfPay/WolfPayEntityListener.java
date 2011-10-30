@@ -33,6 +33,7 @@ public class WolfPayEntityListener extends EntityListener {
 				{
 					//no message
 					wolf.setOwner(tamer);
+					return;
 				}
 				int allowedwolves = WolfPay.freewolves;
 				if (WolfPay.savebought)
