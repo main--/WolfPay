@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import javax.persistence.PersistenceException;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -66,6 +67,14 @@ public class WolfPay extends JavaPlugin {
 		config.set("price", price);
 		config.set("freewolves", freewolves);
 		config.set("savebought", savebought);
+
+		try {
+			config.save(new File(this.getDataFolder(), "config.yml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			Util.log("Couldn't save the config! Disabling...", Level.SEVERE);
+			this.getServer().getPluginManager().disablePlugin(this);
+		}
 		
 		if (savebought)
 			setupDatabase();
@@ -78,14 +87,20 @@ public class WolfPay extends JavaPlugin {
 		WolfPay.messages.put("notenoughmoney", "Sorry, but you don't have enough money to do this.");
 		WolfPay.messages.put("nopermission", "Sorry, but you don't have the permission to do this.");
 		
+		File messagesFile = new File(this.getDataFolder(), "messages.yml");
+		FileConfiguration messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
+				
 		for (String s : WolfPay.messages.keySet())
-			WolfPay.messages.put(s, config.getString("messages." + s, WolfPay.messages.get(s)));
-
+		{
+			WolfPay.messages.put(s, messagesConfig.getString(s, WolfPay.messages.get(s)));
+			messagesConfig.set(s, WolfPay.messages.get(s));
+		}
+		
 		try {
-			config.save(new File(this.getDataFolder(), "config.yml"));
+			messagesConfig.save(messagesFile);
 		} catch (IOException e) {
 			e.printStackTrace();
-			Util.log("Couldn't save the config! Disabling...", Level.SEVERE);
+			Util.log("Couldn't save messages! Disabling...", Level.SEVERE);
 			this.getServer().getPluginManager().disablePlugin(this);
 		}
 		
