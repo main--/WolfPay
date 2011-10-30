@@ -1,6 +1,3 @@
-/**
- * 
- */
 package me.main__.WolfPay;
 
 import java.util.ArrayList;

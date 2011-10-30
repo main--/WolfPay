@@ -9,23 +9,13 @@ import com.avaje.ebean.validation.NotNull;
 @Entity()
 @Table(name="wolfpay_accounts")
 public class Account {
-//	@Id
-//	private int id;
-	
+
 	@Id
 	@NotNull
 	private String playerName;
 	
 	@NotNull
 	private int boughtwolves;
-
-//	public int getId() {
-//		return id;
-//	}
-//
-//	public void setId(int id) {
-//		this.id = id;
-//	}
 
 	public String getPlayerName() {
 		return playerName;
