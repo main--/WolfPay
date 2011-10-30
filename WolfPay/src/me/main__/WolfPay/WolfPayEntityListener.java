@@ -24,12 +24,12 @@ public class WolfPayEntityListener extends EntityListener {
 			Player tamer = (Player) event.getOwner();
 			
 			//first: has he the permission?
-			if (Util.permission(tamer, "wolfpay.tame"))
+			if (tamer.hasPermission("wolfpay.tame"))
 			{
 				//next: is he inside the free-limit?
 				List<Wolf> wolves = Util.getWolves(tamer);
 				wolves.add(wolf); //since this event isn't fully processed, we need to add the wolf manually.
-				if (Util.permission(tamer, "wolfpay.unlimited"))
+				if (tamer.hasPermission("wolfpay.unlimited"))
 				{
 					//no message
 					wolf.setOwner(tamer);
@@ -51,7 +51,7 @@ public class WolfPayEntityListener extends EntityListener {
 							.replaceAll("x", String.valueOf(wolves.size()))
 							.replaceAll("y", String.valueOf(allowedwolves)));
 					
-					if (Util.permission(tamer, "wolfpay.pay")) //if he can bypass the limit (pay)
+					if (tamer.hasPermission("wolfpay.pay")) //if he can bypass the limit (pay)
 						if (wolves.size() == allowedwolves) //if he has reached the limit
 							tamer.sendMessage(ChatColor.YELLOW.toString() + WolfPay.getMessage("nextpay"));
 					
@@ -59,7 +59,7 @@ public class WolfPayEntityListener extends EntityListener {
 				}
 				else
 				{
-					if (Util.permission(tamer, "wolfpay.pay"))
+					if (tamer.hasPermission("wolfpay.pay"))
 					{
 						//then: check if he has enough money
 						Holdings balance = iConomy.getAccount(tamer.getName()).getHoldings();

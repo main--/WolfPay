@@ -4,4 +4,21 @@ version: 1.0
 author: main()
 description: Let players pay for wolves!
 database: true
-depends: [Permissions, iConomy]
+depends: [iConomy]
+
+permissions:
+    wolfpay.*:
+        description: Gives you access to everything WolfPay-related
+        children:
+            wolfpay.unlimited: true
+            wolfpay.pay: true
+            wolfpay.tame: true
+    wolfpay.tame:
+        description: Allows you to tame wolves
+        default: true
+    wolfpay.pay:
+        description: Allows you to tame more wolves by paying money
+        default: true
+    wolfpay.unlimited:
+        description: Allows you to have an unlimited amount of wolves without paying money
+        default: op

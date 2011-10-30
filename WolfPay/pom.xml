@@ -89,13 +89,6 @@
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
-  		<groupId>com.nijikokoun.bukkit.Permissions</groupId>
-  		<artifactId>permissions</artifactId>
-  		<scope>system</scope>
-  		<systemPath>C:\bukkit\Permissions.jar</systemPath>
-  		<version>3.6.1</version>
-  	</dependency>
-  	<dependency>
   		<groupId>com.iConomy</groupId>
   		<artifactId>iConomy</artifactId>
   		<scope>system</scope>

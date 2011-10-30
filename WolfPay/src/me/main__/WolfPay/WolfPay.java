@@ -17,7 +17,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 import com.iConomy.iConomy;
-import com.nijikokun.bukkit.Permissions.Permissions;
 
 /**
  * @author main()
@@ -25,7 +24,6 @@ import com.nijikokun.bukkit.Permissions.Permissions;
  */
 public class WolfPay extends JavaPlugin {
 	
-	public static Permissions permissions;
 	public static iConomy iconomy;
 	
 	public static int price = 25;
@@ -51,8 +49,6 @@ public class WolfPay extends JavaPlugin {
 		PluginManager pm = this.getServer().getPluginManager();
 		
 		try {
-			//get Permissions
-			permissions = (Permissions) pm.getPlugin("Permissions");
 			iconomy = (iConomy) pm.getPlugin("iConomy");
 		} catch (Throwable t) {
 			t.printStackTrace();
