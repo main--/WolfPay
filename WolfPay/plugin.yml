@@ -1,6 +1,6 @@
 name: WolfPay
 main: me.main__.WolfPay.WolfPay
-version: 1.0
+version: ${project.version}
 author: main()
 description: Let players pay for wolves!
 database: true
