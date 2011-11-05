@@ -7,8 +7,7 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.EntityTameEvent;
 
-import com.iConomy.iConomy;
-import com.iConomy.system.Holdings;
+import com.fernferret.allpay.GenericBank;
 
 public class WolfPayEntityListener extends EntityListener {
 	
@@ -63,12 +62,12 @@ public class WolfPayEntityListener extends EntityListener {
 					if (tamer.hasPermission("wolfpay.pay"))
 					{
 						//then: check if he has enough money
-						Holdings balance = iConomy.getAccount(tamer.getName()).getHoldings();
-						if (balance.hasEnough(WolfPay.price)) {
+						GenericBank bank = plugin.getBank();
+						if (bank.hasEnough(tamer, WolfPay.price, -1)) {
 							//yay, let's go on!
-							balance.subtract(WolfPay.price);
+						    bank.pay(tamer, WolfPay.price, -1);
 							tamer.sendMessage(ChatColor.GREEN + WolfPay.getMessage("successpay")
-											.replaceAll("money", iConomy.format(WolfPay.price)));
+											.replaceAll("money", bank.getFormattedAmount(tamer, WolfPay.price, -1)));
 
 							wolf.setOwner(tamer);
 

@@ -17,7 +17,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.iConomy.iConomy;
+import com.fernferret.allpay.AllPay;
+import com.fernferret.allpay.GenericBank;
 
 /**
  * @author main()
@@ -25,7 +26,9 @@ import com.iConomy.iConomy;
  */
 public class WolfPay extends JavaPlugin {
 	
-	public static iConomy iconomy;
+	private static GenericBank bank = null;
+	private static AllPay banker;
+	private double allpayversion = 3;
 	
 	public static int price = 25;
 	public static int freewolves = 2;
@@ -33,10 +36,17 @@ public class WolfPay extends JavaPlugin {
 	
 	public static HashMap<String, String> messages = new HashMap<String, String>();
 	
+	public GenericBank getBank() {
+	    return bank;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.Plugin#onDisable()
 	 */
 	public void onDisable() {
+	    this.banker = null;
+	    this.bank = null;
+	    
 		PluginDescriptionFile pdfFile = this.getDescription();
 		Util.log(pdfFile.getName() + " version " + pdfFile.getVersion() + " is disabled!");
 	}
@@ -49,13 +59,13 @@ public class WolfPay extends JavaPlugin {
 		
 		PluginManager pm = this.getServer().getPluginManager();
 		
-		try {
-			iconomy = (iConomy) pm.getPlugin("iConomy");
-		} catch (Throwable t) {
-			t.printStackTrace();
-			Util.log("Couldn't hook into Permissions and/or iConomy. Disabling...", Level.SEVERE);
-			pm.disablePlugin(this);
-		}
+		// Perform initial checks for AllPay
+        if (!this.validateAllpay()) {
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        this.banker = new AllPay(this, "[WolfPay] ");
+        this.bank = this.banker.loadEconPlugin();
 		
 		pm.registerEvent(Type.ENTITY_TAME, new WolfPayEntityListener(), Priority.High, this);
 		
@@ -108,7 +118,30 @@ public class WolfPay extends JavaPlugin {
 		Util.log(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 	}
 	
-	public static String getMessage(String key)
+	private boolean validateAllpay() {
+	    try {
+            this.banker = new AllPay(this, "Verify");
+            if (this.banker.getVersion() >= allpayversion) {
+                return true;
+            } else {
+                Util.log(" - Version " + this.getDescription().getVersion() + " was NOT ENABLED!!!");
+                Util.log(" A plugin that has loaded before " + this.getDescription().getName() + " has an incompatible version of AllPay!");
+                Util.log(" The Following Plugins MAY out of date!");
+                Util.log(" This plugin needs AllPay v" + allpayversion + " or higher and another plugin has loaded v" + this.banker.getVersion() + "!");
+                Util.log(AllPay.pluginsThatUseUs.toString());
+                return false;
+            }
+        } catch (Throwable t) {
+        }
+	    Util.log(" - Version " + this.getDescription().getVersion() + " was NOT ENABLED!!!");
+	    Util.log(" A plugin that has loaded before " + this.getDescription().getName() + " has an incompatible version of AllPay!");
+	    Util.log(" Check the logs for [AllPay] - Version ... for PLUGIN NAME to find the culprit! Then Yell at that dev!");
+	    Util.log(" Or update that plugin :P");
+	    Util.log(" This plugin needs AllPay v" + allpayversion + " or higher!");
+        return false;
+    }
+
+    public static String getMessage(String key)
 	{
 		return messages.get(key);
 	}

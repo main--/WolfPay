@@ -1,112 +1,195 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>WolfPay</groupId>
-  <artifactId>WolfPay</artifactId>
-  <name>WolfPay</name>
-  <version>1.2</version>
-  <description>Let players pay for wolves!</description>
-  <packaging>jar</packaging>
+	<groupId>WolfPay</groupId>
+	<artifactId>WolfPay</artifactId>
+	<name>WolfPay</name>
+	<version>1.2</version>
+	<description>Let players pay for wolves!</description>
+	<packaging>jar</packaging>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-  <ciManagement>
-  	<system>Jenkins</system>
-  	<url>http://ci.maincraft.tk/</url>
-  </ciManagement>
-  
-  <scm>
-    <connection>scm:git:git://github.com/main--/WolfPay.git</connection>
-    <url>https://github.com/main--/WolfPay</url>
-    <developerConnection>scm:git:git@github.com:main--/WolfPay.git</developerConnection>
-  </scm>
-  
-  
-  <build>
-    <sourceDirectory>src</sourceDirectory>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>http://ci.maincraft.tk/</url>
+	</ciManagement>
 
-    <!-- Resources -->
-    <resources>
-      <resource>
-        <targetPath>.</targetPath>
-        <filtering>true</filtering>
-        <directory>.</directory>
-        <includes>
-          <include>plugin.yml</include>
-        </includes>
-      </resource>
-    </resources>
+	<scm>
+		<connection>scm:git:git://github.com/main--/WolfPay.git</connection>
+		<url>https://github.com/main--/WolfPay</url>
+		<developerConnection>scm:git:git@github.com:main--/WolfPay.git</developerConnection>
+	</scm>
 
-    <!-- Plugins -->
-    <plugins>
-      <!-- Compile plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-      </plugin>
 
-      <!-- JAR creation plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.3.1</version>
-        <configuration>
-          <archive>
-            <addMavenDescriptor>true</addMavenDescriptor>
-            <pomPropertiesFile>true</pomPropertiesFile>
-            <manifest>
-              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
 
-      <!-- Release -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.0</version><!--$NO-MVN-MAN-VER$-->
-        <configuration>
-          <preparationGoals>assembly:assembly</preparationGoals>
-          <goals>assembly:assembly</goals>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  
-  
-  <dependencies>
-  	<dependency>
-  		<groupId>org.bukkit</groupId>
-  		<artifactId>bukkit</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.iConomy</groupId>
-  		<artifactId>iConomy</artifactId>
-  		<scope>system</scope>
-  		<systemPath>C:\bukkit\iConomy.jar</systemPath>
-  		<version>5.0</version>
-  	</dependency>
-  </dependencies>
-  <repositories>
-    <repository>
-      <id>bukkit-repo</id>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <url>http://repo.bukkit.org/artifactory/repo/</url>
-    </repository>
-  </repositories>
- 
+		<!-- Resources -->
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>.</directory>
+				<includes>
+					<include>plugin.yml</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<!-- Plugins -->
+		<plugins>
+			<!-- Compile plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+			</plugin>
+
+			<!-- Build Helper - Additional Source Folders -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>add-wsdl-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.basedir}/lib/allpay/src</source>
+								<source>${project.basedir}/lib/commandhandler/src</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- JAR creation plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>true</addMavenDescriptor>
+						<pomPropertiesFile>true</pomPropertiesFile>
+						<manifest>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!-- Release -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.0</version><!--$NO-MVN-MAN-VER$ -->
+				<configuration>
+					<preparationGoals>assembly:assembly</preparationGoals>
+					<goals>assembly:assembly</goals>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.iConomy</groupId>
+			<artifactId>iConomy</artifactId>
+			<scope>system</scope>
+			<systemPath>C:\bukkit\iConomy.jar</systemPath>
+			<version>5.0</version>
+		</dependency>
+
+		<!-- Start of Economy Dependencies -->
+		<dependency>
+			<groupId>cosine.boseconomy</groupId>
+			<artifactId>BOSEconomy</artifactId>
+			<version>0.6.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.crafter.tickleman.RealShop</groupId>
+			<artifactId>RealShop</artifactId>
+			<version>0.63</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.iCo6</groupId>
+			<artifactId>iConomy</artifactId>
+			<version>6.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.iConomy</groupId>
+			<artifactId>iConomy</artifactId>
+			<version>5.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.nijiko.coelho.iConomy</groupId>
+			<artifactId>iConomy</artifactId>
+			<version>4.65</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.earth2me.essentials</groupId>
+			<artifactId>Essentials</artifactId>
+			<version>2.4.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>me.ashtheking.currency</groupId>
+			<artifactId>MultiCurrency</artifactId>
+			<version>0.09</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<!-- End of Economy Dependencies -->
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>bukkit-repo</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<url>http://repo.bukkit.org/artifactory/repo/</url>
+		</repository>
+		<repository>
+            <id>OnARandomBox</id> <!-- I hope it's okay that I use this... -->
+            <url>http://repo.onarandombox.com/artifactory/repo</url>
+        </repository>
+	</repositories>
 </project>

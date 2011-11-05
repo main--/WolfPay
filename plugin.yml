@@ -4,7 +4,6 @@ version: ${project.version}
 author: main()
 description: Let players pay for wolves!
 database: true
-depends: [iConomy]
 
 permissions:
     wolfpay.*:
