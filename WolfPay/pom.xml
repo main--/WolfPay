@@ -5,7 +5,7 @@
   <groupId>WolfPay</groupId>
   <artifactId>WolfPay</artifactId>
   <name>WolfPay</name>
-  <version>1.1</version>
+  <version>1.2</version>
   <description>Let players pay for wolves!</description>
   <packaging>jar</packaging>
 
