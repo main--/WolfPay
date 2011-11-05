@@ -7,30 +7,30 @@ import javax.persistence.Table;
 import com.avaje.ebean.validation.NotNull;
 
 @Entity()
-@Table(name="wolfpay_accounts")
+@Table(name = "wolfpay_accounts")
 public class Account {
 
-	@Id
-	@NotNull
-	private String playerName;
-	
-	@NotNull
-	private int boughtwolves;
+    @Id
+    @NotNull
+    private String playerName;
 
-	public String getPlayerName() {
-		return playerName;
-	}
+    @NotNull
+    private int boughtwolves;
 
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
-	}
+    public String getPlayerName() {
+        return playerName;
+    }
 
-	public int getBoughtwolves() {
-		return boughtwolves;
-	}
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 
-	public void setBoughtwolves(int boughtwolves) {
-		this.boughtwolves = boughtwolves;
-	}
-	
+    public int getBoughtwolves() {
+        return boughtwolves;
+    }
+
+    public void setBoughtwolves(int boughtwolves) {
+        this.boughtwolves = boughtwolves;
+    }
+
 }
